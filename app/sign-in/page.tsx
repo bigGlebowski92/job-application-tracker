@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signIn } from '@/lib/auth/auth-client';
+import { authClient, signIn } from '@/lib/auth/auth-client';
 import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
@@ -38,7 +38,9 @@ export default function SignInPage() {
       if (result.error) {
         setError(result.error.message ?? 'Failed to sign in');
       } else {
+        await authClient.getSession();
         router.push('/dashboard');
+        router.refresh();
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { signUp } from '@/lib/auth/auth-client';
+import { authClient, signUp } from '@/lib/auth/auth-client';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -40,7 +40,9 @@ export default function SignUpPage() {
       if (result.error) {
         setError(result.error.message ?? 'Failed to sign up');
       } else {
+        await authClient.getSession();
         router.push('/dashboard');
+        router.refresh();
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
